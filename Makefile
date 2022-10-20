@@ -9,4 +9,4 @@ LINKER_FLAGS = -lGL -lglfw
 all: main
 
 main:
-	$(CC) main.cpp glad.c $(INCLUDE_PATHS) $(LINKER_FLAGS) -o a
+	$(CC) main.cpp glad.c src/shader.cpp $(INCLUDE_PATHS) $(LINKER_FLAGS) -o a
