@@ -79,6 +79,11 @@ void Shader::setFloat(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
+void Shader::setVec2(const std::string &name, glm::vec2 value) const
+{
+    glUniform2f(glGetUniformLocation(ID, name.c_str()), value.x, value.y);
+}
+
 void Shader::checkCompileErrors(unsigned int shader, std::string type)
 {
     int success;
