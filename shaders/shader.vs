@@ -8,6 +8,6 @@ uniform vec2 uScale;
 
 void main()
 {
-    gl_Position = vec4(3.0/4.0 * uScale.x * aPos.x + uCoord.x, uScale.y * aPos.y + uCoord.y, 0.0, 1.0);
+    gl_Position = vec4(3.0/4.0 * (uScale.x * aPos.x + uCoord.x), uScale.y * aPos.y + uCoord.y, 0.0, 1.0);
     vertexColor = vec3(1.0, 1.0, 1.0); 
 }  

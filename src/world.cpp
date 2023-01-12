@@ -3,8 +3,9 @@
 
 #include "shader.h"
 #include "world.h"
+#include "glm/gtc/random.hpp"
 
-using std::string, glm::vec2;
+using std::string, glm::vec2, glm::circularRand;
 
 float vertices[] = {
     0.5f, 0.5f,
@@ -19,9 +20,11 @@ unsigned int indices[] = {
 World::World() : mShader("shaders/shader.vs", "shaders/shader.fs")
 {
     loadBuffers();
-    player1 = {{-0.5f, 0.f}, {0.1f, 0.3f}};
-    player2 = {{0.5f, 0.f}, {0.1f, 0.3f}};
+    player1 = {{-0.7f, 0.f}, {0.1f, 0.3f}};
+    player2 = {{0.7f, 0.f}, {0.1f, 0.3f}};
     line = {{0.0f, 0.0f}, {0.03f, 2.0f}};
+
+    ball = {{0.f, 0.f}, {0.1f, 0.1f}, 0.005f * circularRand(1.f)};
 }
 
 void World::loadBuffers()
@@ -63,6 +66,15 @@ void World::inputMode(GLFWwindow *window)
     }
 }
 
+void World::loadBall()
+{
+    ball.move();
+    if (ball.coordinates.x <= 0.f)
+        ball.collision(player1, 1);
+    else
+        ball.collision(player2, 2);
+}
+
 void World::draw()
 {
     mShader.use();
@@ -80,5 +92,10 @@ void World::draw()
     // DRAW PLAYER2
     mShader.setVec2("uCoord", player2.coordinates);
     mShader.setVec2("uScale", player2.scale);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    // DRAW BALL
+    mShader.setVec2("uCoord", ball.coordinates);
+    mShader.setVec2("uScale", ball.scale);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
