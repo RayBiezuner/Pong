@@ -17,14 +17,15 @@ unsigned int indices[] = {
     0, 1, 3,
     1, 2, 3};
 
-World::World() : mShader("shaders/shader.vs", "shaders/shader.fs")
+World::World() : mShader("shaders/shader.vs", "shaders/shader.fs"),
+                 digit1(0, {-0.3f, 0.8f}, {0.05f, 0.05f}), digit2(0, {0.3f, 0.8f}, {0.05f, 0.05f})
 {
     loadBuffers();
-    player1 = {{-0.7f, 0.f}, {0.1f, 0.3f}};
-    player2 = {{0.7f, 0.f}, {0.1f, 0.3f}};
+    player1 = {{-0.95f, 0.f}, {0.1f, 0.3f}};
+    player2 = {{0.95f, 0.f}, {0.1f, 0.3f}};
     line = {{0.0f, 0.0f}, {0.03f, 2.0f}};
 
-    ball = {{0.f, 0.f}, {0.1f, 0.1f}, 0.005f * circularRand(1.f)};
+    ball = {{0.f, 0.f}, {0.1f, 0.1f}, 0.01f * circularRand(1.f)};
 }
 
 void World::loadBuffers()
@@ -73,8 +74,19 @@ void World::loadBall()
         ball.collision(player1, 1);
     else
         ball.collision(player2, 2);
+
+    std::cout << ball.coordinates.x << std::endl;
+    if (ball.coordinates.x <= -4.f / 3.f)
+        digit1.increaseScore();
+    else if (ball.coordinates.x >= 4.f / 3.f)
+        digit1.increaseScore();
 }
 
+void World::loadScore()
+{
+    digit1.show(mShader);
+    digit2.show(mShader);
+}
 void World::draw()
 {
     mShader.use();
@@ -93,6 +105,8 @@ void World::draw()
     mShader.setVec2("uCoord", player2.coordinates);
     mShader.setVec2("uScale", player2.scale);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    // DRAW SCORE
 
     // DRAW BALL
     mShader.setVec2("uCoord", ball.coordinates);

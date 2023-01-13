@@ -43,6 +43,7 @@ int main()
 
         world.inputMode(window);
         world.loadBall();
+        world.loadScore();
         world.draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
